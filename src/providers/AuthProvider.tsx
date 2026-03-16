@@ -1,48 +1,88 @@
 import React from "react";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext, type User } from "../context/AuthContext";
+import mockUsers from "../data/mockBack";
 
 type Props = {
   children: React.ReactNode;
 };
 
 export const AuthProvider = ({ children }: Props) => {
-  //   const [user, setUser] = React.useState(null);
-  //   const [accessToken, setAccessToken] = React.useState(null);
-  //   const [refreshToken, setRefreshToken] = React.useState(null);
-  //   const [loading, setLoading] = React.useState(true);
+  const [user, setUser] = React.useState<User | undefined>(undefined);
+  const [accessToken, setAccessToken] = React.useState<string | undefined>(undefined);
+  const [refreshToken, setRefreshToken] = React.useState<string | undefined>(undefined);
+  const [loading, setLoading] = React.useState<boolean>(false);
+  const isAuthenticated = !!accessToken;
 
-  const isAuthenticated = false;
+  async function login(name: string, password: string) {
+    try {
+      setLoading(true);
+      // Simula uma chamada de login para o backend
+      console.log(mockUsers)
+      const foundUser = mockUsers.find(
+        (u) => u.login === name && u.password === password,
+      );
 
-  //   const login = async () => {
-  //     try {
-  //       setLoading(true);
-  //     } catch (error) {
-  //       window.alert("Error occurred while logging in:" + error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
+      if (!foundUser) {
+        throw new Error("Invalid credentials");
+        
+      }
 
-  //   return (
-  //     <AuthContext.Provider
-  //       value={{
-  //         user,
-  //         accessToken,
-  //         isAuthenticated,
-  //         refreshToken,
-  //         loading,
-  //         login,
-  //         logout,
-  //         refresh,
-  //       }}
-  //     >
-  //       {children}
-  //     </AuthContext.Provider>
-  //   );
+      setUser({
+        _id: foundUser._id,
+        name: foundUser.name,
+        email: foundUser.email,
+      });
+      setAccessToken("123456789abcdef"); // Simula um token de acesso
+      setRefreshToken("abcdef123456789"); // Simula um token de atualização
+      
+      // Armazena os dados no localStorage para persistência
+      localStorage.setItem("user", JSON.stringify(foundUser));
+      localStorage.setItem("accessToken", "123456789abcdef");
+      localStorage.setItem("refreshToken", "abcdef123456789");
+
+    } catch (error) {
+      console.error("Login failed:", error);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function logout() {
+    setUser(undefined);
+    setAccessToken(undefined);
+    setRefreshToken(undefined);
+  }
+
+  async function refresh() {
+    if (!refreshToken) return;
+
+    setAccessToken("new_mock_access_token");
+  }
+  React.useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    const storedAccessToken = localStorage.getItem("accessToken");
+    const storedRefreshToken = localStorage.getItem("refreshToken");
+
+    if (storedUser && storedAccessToken) {
+      setUser(JSON.parse(storedUser));
+      setAccessToken(storedAccessToken);
+      setRefreshToken(storedRefreshToken ?? undefined);
+    }
+
+    setLoading(false);
+  }, []);
   return (
     <AuthContext.Provider
       value={{
+        login,
+        logout,
+        user,
+        accessToken,
+        refreshToken,
         isAuthenticated,
+        loading,
+        refresh,
       }}
     >
       {children}

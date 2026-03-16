@@ -1,16 +1,16 @@
 import React from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 
-
 type Props = {
   placeholder: string;
   type?: "email" | "password" | "text" | "number";
   value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-const InputComponent = ({ placeholder, type, value }: Props) => {
+const InputComponent = ({ placeholder, type, value, onChange}: Props) => {
   const [showWhilePressing, setShowWhilePressing] = React.useState(false);
-  const [password, setPassword] = React.useState("");
+
 
   if (type !== "password") {
     return (
@@ -19,6 +19,7 @@ const InputComponent = ({ placeholder, type, value }: Props) => {
         placeholder={placeholder}
         type={type}
         value={value}
+        onChange={onChange}
         required
       />
     );
@@ -27,8 +28,8 @@ const InputComponent = ({ placeholder, type, value }: Props) => {
       <div className="relative">
         <input
           type={showWhilePressing ? "text" : "password"}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={value}
+          onChange={onChange}
           className="border border-gray-400 rounded-md w-full p-2"
           placeholder="Senha"
         />
