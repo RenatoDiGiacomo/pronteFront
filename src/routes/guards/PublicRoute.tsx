@@ -1,10 +1,11 @@
+import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
 
-type Props = {
-  isAuthenticated: boolean;
-};
 
-export function PublicRoute({ isAuthenticated }: Props) {
+export function PublicRoute() {
+  const { isAuthenticated } = React.useContext(AuthContext) || {};
+
   if (isAuthenticated) {
     return <Navigate to="/" replace />;
   }

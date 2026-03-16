@@ -6,18 +6,21 @@ import Dashboard from "../pages/Dashboard/Dashboard";
 import ClientList from "../pages/ClientList/ClientList";
 import Login from "../pages/Login/Login";
 
-const isAuthenticated = true; // Simulação de autenticação
+
+
+// React.useContext dentro de cada rota para verificar se o 
+// usuário está autenticado ou não, e redirecionar para a página de login caso não esteja autenticado.
 
 export const router = createBrowserRouter([
   {
     element: <App />,
     children: [
       {
-        element: <PublicRoute isAuthenticated={isAuthenticated} />,
+        element: <PublicRoute />,
         children: [{ path: "/login", element: <Login /> }],
       },
       {
-        element: <AuthRoute isAuthenticated={isAuthenticated} />,
+        element: <AuthRoute />,
         children: [
           { path: "/", element: <Dashboard /> },
           { path: "/clients", element: <ClientList /> },

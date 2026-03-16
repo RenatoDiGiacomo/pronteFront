@@ -1,17 +1,18 @@
 import { Navigate, Outlet } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
+import React from "react";
 
-type Props = {
-  isAuthenticated: boolean;
-};
+export function AuthRoute() {
+  const { isAuthenticated } = React.useContext(AuthContext) || {};
 
-export function AuthRoute({ isAuthenticated }: Props) {
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
 
+  // NO teste inserir uma HEADER de Menu
   return (
     <div>
-      <div>teste</div>
+      <div>HEADER</div>
       <Outlet />
     </div>
   );
