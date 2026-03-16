@@ -1,12 +1,18 @@
-
-import ContainerLogin from '../../components/containers/ContainerLogin/ContainerLogin'
+import ContainerInputLogin from "../../components/LoginPage/containers/ContainerInputLogin";
+import ContainerLogin from "../../components/LoginPage/containers/ContainerLogin";
+import TitleImage from "../../components/LoginPage/imagesComponents/TitleImage";
+import InputComponent from "../../components/LoginPage/Input/inputComponent";
 
 const Login = () => {
   return (
     <ContainerLogin>
-      <h1>Login</h1>
+      <TitleImage />
+      <ContainerInputLogin>
+        <InputComponent placeholder="Login" type={"text"}/>
+        <InputComponent placeholder="Password" type={"password"} />
+      </ContainerInputLogin>
     </ContainerLogin>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;
