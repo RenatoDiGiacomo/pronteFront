@@ -10,7 +10,7 @@ const Login = () => {
   const [user, setUser] = React.useState("");
   const [password, setPassword] = React.useState("");
 
-  const { login } = useAuth();
+  const { login} = useAuth();
 
   const handlerLogin = () => {
     if (user !== "" && password !== "") {

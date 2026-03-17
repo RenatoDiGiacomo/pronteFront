@@ -7,9 +7,9 @@ type Props = {
 };
 
 export const AuthProvider = ({ children }: Props) => {
-  const [user, setUser] = React.useState<User | undefined>(undefined);
-  const [accessToken, setAccessToken] = React.useState<string | undefined>(undefined);
-  const [refreshToken, setRefreshToken] = React.useState<string | undefined>(undefined);
+  const [user, setUser] = React.useState<User | null>(null);
+  const [accessToken, setAccessToken] = React.useState<string | null>(null);
+  const [refreshToken, setRefreshToken] = React.useState<string | null>(null);
   const [loading, setLoading] = React.useState<boolean>(false);
   const isAuthenticated = !!accessToken;
 
@@ -17,14 +17,13 @@ export const AuthProvider = ({ children }: Props) => {
     try {
       setLoading(true);
       // Simula uma chamada de login para o backend
-      console.log(mockUsers)
+      console.log(mockUsers);
       const foundUser = mockUsers.find(
         (u) => u.login === name && u.password === password,
       );
 
       if (!foundUser) {
         throw new Error("Invalid credentials");
-        
       }
 
       setUser({
@@ -34,12 +33,11 @@ export const AuthProvider = ({ children }: Props) => {
       });
       setAccessToken("123456789abcdef"); // Simula um token de acesso
       setRefreshToken("abcdef123456789"); // Simula um token de atualização
-      
+
       // Armazena os dados no localStorage para persistência
       localStorage.setItem("user", JSON.stringify(foundUser));
       localStorage.setItem("accessToken", "123456789abcdef");
       localStorage.setItem("refreshToken", "abcdef123456789");
-
     } catch (error) {
       console.error("Login failed:", error);
       throw error;
@@ -49,9 +47,13 @@ export const AuthProvider = ({ children }: Props) => {
   }
 
   function logout() {
-    setUser(undefined);
-    setAccessToken(undefined);
-    setRefreshToken(undefined);
+    console.log("sair");
+    setUser(null);
+    setAccessToken(null);
+    setRefreshToken(null);
+    localStorage.removeItem("user");
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
   }
 
   async function refresh() {
@@ -67,7 +69,7 @@ export const AuthProvider = ({ children }: Props) => {
     if (storedUser && storedAccessToken) {
       setUser(JSON.parse(storedUser));
       setAccessToken(storedAccessToken);
-      setRefreshToken(storedRefreshToken ?? undefined);
+      setRefreshToken(storedRefreshToken ?? null);
     }
 
     setLoading(false);

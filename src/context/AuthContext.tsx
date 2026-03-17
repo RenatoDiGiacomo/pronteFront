@@ -9,14 +9,14 @@ export type User = {
 
 // Type definition for the AuthContext, including user information and authentication functions
 export type AuthContextType = {
-  user?: User;
-  accessToken?: string;
-  refreshToken?: string;
+  user?: User | null;
+  accessToken?: string | null;
+  refreshToken?: string | null;
   isAuthenticated: boolean;
-  loading?: boolean;
+  loading: boolean;
 
   login: (user: string, password: string) => Promise<void>;
-  logout?: () => void;
+  logout: () => void;
   refresh?: () => Promise<void>;
 };
 

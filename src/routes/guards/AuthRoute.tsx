@@ -14,8 +14,10 @@ export function AuthRoute() {
   return (
     <div className="flex flex-row">
       <NavbarComponent />
-      <div className="w-full h-lvh bg-red-200 p-4">
-        <Outlet />
+      <div className="w-full h-dvh bg-white p-4">
+        <div className="bg-gray-100 w-full h-full p-4 rounded">
+          <Outlet />
+        </div>
       </div>
     </div>
   );
